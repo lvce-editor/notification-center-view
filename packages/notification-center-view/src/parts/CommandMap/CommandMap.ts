@@ -2,6 +2,7 @@ import { create } from '../Create/Create.ts'
 import { diff2 } from '../Diff2/Diff2.ts'
 import { handleClick } from '../HandleClick/HandleClick.ts'
 import { handleExtensionManagementMessagePort } from '../HandleExtensionManagementMessagePort/HandleExtensionManagementMessagePort.ts'
+import { handleMessagePort } from '../HandleMessagePort/HandleMessagePort.ts'
 import { handleNotificationsChanged } from '../HandleNotificationsChanged/HandleNotificationsChanged.ts'
 import { loadContent } from '../LoadContent/LoadContent.ts'
 import * as NotificationCenterStates from '../NotificationCenterStates/NotificationCenterStates.ts'
@@ -14,6 +15,7 @@ export const commandMap = {
   'NotificationCenter.getCommandIds': NotificationCenterStates.getCommandIds,
   'NotificationCenter.handleClick': NotificationCenterStates.wrapCommand(handleClick),
   'NotificationCenter.handleExtensionManagementMessagePort': handleExtensionManagementMessagePort,
+  'NotificationCenter.handleMessagePort': handleMessagePort,
   'NotificationCenter.handleNotificationsChanged': NotificationCenterStates.wrapCommand(handleNotificationsChanged),
   'NotificationCenter.loadContent': NotificationCenterStates.wrapCommand(loadContent),
   'NotificationCenter.render2': render2,
