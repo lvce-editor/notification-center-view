@@ -13,7 +13,6 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version-file: .nvmrc
-          registry-url: https://registry.npmjs.org
       - run: npm ci
       - run: npm run build
         env:
@@ -21,8 +20,7 @@ jobs:
       - run: npm test
       - run: npm run type-check
       - run: npm run lint
-      - run: npm publish --access public
-        working-directory: .tmp/dist
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - run: npm pack .tmp/dist --pack-destination .tmp
       - uses: softprops/action-gh-release@v2
+        with:
+          files: .tmp/lvce-editor-notification-center-view-*.tgz
