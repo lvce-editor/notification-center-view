@@ -1,9 +1,6 @@
 import type { Notification } from '../Notification/Notification.ts'
-import * as NotificationCenterStates from '../NotificationCenterStates/NotificationCenterStates.ts'
+import type { NotificationCenterState } from '../NotificationCenterState/NotificationCenterState.ts'
 
-export const handleNotificationsChanged = async (notifications: readonly Notification[]): Promise<void> => {
-  for (const uid of NotificationCenterStates.getKeys()) {
-    const { newState, oldState } = NotificationCenterStates.get(uid)
-    NotificationCenterStates.set(uid, oldState, { ...newState, notifications })
-  }
+export const handleNotificationsChanged = (state: NotificationCenterState, notifications: readonly Notification[]): NotificationCenterState => {
+  return { ...state, notifications }
 }

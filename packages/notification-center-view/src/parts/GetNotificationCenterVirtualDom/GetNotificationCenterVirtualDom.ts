@@ -22,6 +22,7 @@ const getNotificationDom = (notification: Notification): readonly VirtualDomNode
     { childCount: 1, className: 'NotificationCenterMessage', type: VirtualDomElements.Div },
     text(notification.message),
     {
+      ariaLabel: `Hide notifications from ${notification.extensionId}`,
       childCount: 1,
       className: 'NotificationCenterHideButton',
       name: `hide:${notification.extensionId}`,
@@ -38,11 +39,18 @@ export const getNotificationCenterVirtualDom = (notifications: readonly Notifica
       ? [{ childCount: 1, className: 'NotificationCenterEmpty', type: VirtualDomElements.Div }, text('No new notifications')]
       : notifications.flatMap(getNotificationDom)
   return [
-    { childCount: 2, className: 'Viewlet NotificationCenter', role: 'dialog', type: VirtualDomElements.Div },
+    { ariaLabel: 'Notifications', childCount: 2, className: 'Viewlet NotificationCenter', role: 'dialog', type: VirtualDomElements.Div },
     { childCount: 2, className: 'NotificationCenterHeader', type: VirtualDomElements.Div },
     { childCount: 1, className: 'NotificationCenterTitle', type: VirtualDomElements.H2 },
     text('Notifications'),
-    { childCount: 1, className: 'NotificationCenterClearButton', name: 'clear', onClick, type: VirtualDomElements.Button },
+    {
+      ariaLabel: 'Clear All Notifications',
+      childCount: 1,
+      className: 'NotificationCenterClearButton',
+      name: 'clear',
+      onClick,
+      type: VirtualDomElements.Button,
+    },
     text('Clear All'),
     { childCount: content.length, className: 'NotificationCenterList', type: VirtualDomElements.Div },
     ...content,

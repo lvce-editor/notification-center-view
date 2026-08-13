@@ -23,3 +23,39 @@ test('dismisses a notification', async () => {
   expect(result.notifications).toEqual([])
   expect(invocations).toEqual([[1]])
 })
+
+test('clears all notifications', async () => {
+  let invoked = false
+  rpcState.disposable = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.clearNotifications'(): Promise<void> {
+      invoked = true
+    },
+  })
+  const state = { notifications: [{ extensionId: 'sample.extension', id: 1, message: 'Test', type: 'info' as const }], uid: 1 }
+
+  const result = await handleClick(state, 'clear')
+
+  expect(result.notifications).toEqual([])
+  expect(invoked).toBe(true)
+})
+
+test('hides all notifications from an extension', async () => {
+  const invocations: string[] = []
+  rpcState.disposable = ExtensionManagementWorker.registerMockRpc({
+    async 'Extensions.hideNotificationsFromExtension'(extensionId: string): Promise<void> {
+      invocations.push(extensionId)
+    },
+  })
+  const state = {
+    notifications: [
+      { extensionId: 'sample.extension', id: 1, message: 'First', type: 'info' as const },
+      { extensionId: 'other.extension', id: 2, message: 'Second', type: 'warning' as const },
+    ],
+    uid: 1,
+  }
+
+  const result = await handleClick(state, 'hide:sample.extension')
+
+  expect(result.notifications).toEqual([{ extensionId: 'other.extension', id: 2, message: 'Second', type: 'warning' }])
+  expect(invocations).toEqual(['sample.extension'])
+})
