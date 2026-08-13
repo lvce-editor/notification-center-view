@@ -15,11 +15,11 @@ afterEach(() => {
   rpcState.disposable = undefined
 })
 
-test('updates and renders every open notification center instance', async () => {
+test('schedules an update for every open notification center instance', async () => {
   const invocations: readonly unknown[][] = []
   rpcState.disposable = RendererWorker.registerMockRpc({
-    async 'Viewlet.sendMultiple'(commands: readonly unknown[]): Promise<void> {
-      ;(invocations as unknown[][]).push(commands as unknown[])
+    async 'Viewlet.executeViewletCommand'(...args: readonly unknown[]): Promise<void> {
+      ;(invocations as unknown[][]).push(args as unknown[])
     },
   })
   create(1)
@@ -28,9 +28,8 @@ test('updates and renders every open notification center instance', async () => 
 
   await handleNotificationsChangedAll(notifications)
 
-  expect(NotificationCenterStates.get(1).newState.notifications).toEqual(notifications)
-  expect(NotificationCenterStates.get(2).newState.notifications).toEqual(notifications)
-  expect(invocations).toHaveLength(2)
-  expect(invocations[0]).toEqual([expect.arrayContaining([expect.anything(), 1, expect.any(Array)])])
-  expect(invocations[1]).toEqual([expect.arrayContaining([expect.anything(), 2, expect.any(Array)])])
+  expect(invocations).toEqual([
+    [1, 'handleNotificationsChanged', notifications],
+    [2, 'handleNotificationsChanged', notifications],
+  ])
 })
