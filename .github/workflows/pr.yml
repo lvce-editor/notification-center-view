@@ -1,0 +1,21 @@
+name: PR
+on:
+  pull_request:
+    branches: [main]
+jobs:
+  pr:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-15, windows-2025]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+      - run: npm ci
+      - run: npm run build
+      - run: npm test
+      - run: npm run type-check
+      - run: npm run lint
