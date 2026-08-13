@@ -1,0 +1,55 @@
+{
+  "name": "@lvce-editor/notification-center-view",
+  "version": "0.0.0-dev",
+  "description": "Lazy-loaded notification center worker for LVCE Editor",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lvce-editor/notification-center-view.git"
+  },
+  "license": "MIT",
+  "author": "Lvce Editor",
+  "type": "module",
+  "main": "src/notificationCenterWorkerMain.ts",
+  "scripts": {
+    "test": "node --unhandled-rejections=warn --experimental-vm-modules ../../node_modules/jest/bin/jest.js --detectOpenHandles --forceExit"
+  },
+  "jest": {
+    "injectGlobals": false,
+    "extensionsToTreatAsEsm": [
+      ".ts"
+    ],
+    "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
+    },
+    "transform": {
+      "^.+\\.tsx?$": [
+        "ts-jest",
+        {
+          "useESM": true
+        }
+      ]
+    },
+    "testMatch": [
+      "**/test/**"
+    ],
+    "collectCoverage": true,
+    "coverageThreshold": {
+      "global": {
+        "branches": 50,
+        "functions": 80,
+        "lines": 60
+      }
+    }
+  },
+  "devDependencies": {
+    "@jest/globals": "^30.4.1",
+    "@lvce-editor/constants": "^5.26.0",
+    "@lvce-editor/rpc": "^6.16.0",
+    "@lvce-editor/rpc-registry": "^9.47.0",
+    "@lvce-editor/viewlet-registry": "^5.2.0",
+    "@lvce-editor/virtual-dom-worker": "^11.5.0",
+    "@types/node": "^25.0.3",
+    "jest": "^30.4.2",
+    "ts-jest": "^29.4.12"
+  }
+}

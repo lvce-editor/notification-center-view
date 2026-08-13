@@ -1,0 +1,4 @@
+{
+  "files": [],
+  "references": [{ "path": "./packages/build" }, { "path": "./packages/notification-center-view" }]
+}
