@@ -1,0 +1,16 @@
+{
+  "name": "@lvce-editor/notification-center-view-server",
+  "version": "0.0.0-dev",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "postinstall": "node src/postinstall.js"
+  },
+  "dependencies": {
+    "@lvce-editor/server": "0.101.9",
+    "@lvce-editor/static-server": "0.101.9"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.3"
+  }
+}
