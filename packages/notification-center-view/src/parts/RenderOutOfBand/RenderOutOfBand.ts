@@ -7,7 +7,7 @@ export const renderOutOfBand = async (uid: number): Promise<void> => {
   if (diffResult.length === 0) {
     return
   }
-  const commands = await render2(uid, diffResult)
+  const commands = render2(uid, diffResult)
   if (commands.length === 0) {
     return
   }

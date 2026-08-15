@@ -1,5 +1,5 @@
 import { PlainMessagePortRpc } from '@lvce-editor/rpc'
-import * as RendererProcess from '../RendererProcess/RendererProcess.ts'
+import { RendererProcess } from '@lvce-editor/rpc-registry'
 
 export const handleMessagePort = async (port: MessagePort): Promise<void> => {
   const rpc = await PlainMessagePortRpc.create({
