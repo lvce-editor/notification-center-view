@@ -2,13 +2,18 @@ import type { Test } from '@lvce-editor/test-with-playwright'
 
 export const name = 'notification-center.open-empty'
 
-export const test: Test = async ({ expect, Locator }) => {
+const wait = async (milliseconds: number): Promise<void> => {
+  await new Promise((resolve) => setTimeout(resolve, milliseconds))
+}
+
+export const test: Test = async ({ Command, expect, Locator }) => {
   const bell = Locator('.StatusBarItem[name="Notifications"]')
   await expect(bell).toBeVisible()
   await expect(bell).toHaveAttribute('aria-label', 'No Notifications')
 
   // eslint-disable-next-line e2e/no-direct-click -- verifies the rendered status bar control opens the notification center
   await bell.click()
+  await wait(2000)
 
   const notificationCenter = Locator('.NotificationCenter')
   await expect(notificationCenter).toBeVisible()
@@ -17,7 +22,6 @@ export const test: Test = async ({ expect, Locator }) => {
   await expect(notificationCenter.locator('.NotificationCenterTitle')).toHaveText('Notifications')
   await expect(notificationCenter.locator('.NotificationCenterEmpty')).toHaveText('No new notifications')
 
-  // eslint-disable-next-line e2e/no-direct-click -- leaves the notification center closed for the reused page
-  await bell.click()
+  await Command.execute('Viewlet.closeWidget', 'NotificationCenter')
   await expect(notificationCenter).toBeHidden()
 }
