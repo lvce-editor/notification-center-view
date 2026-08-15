@@ -1,4 +1,9 @@
 {
   "files": [],
-  "references": [{ "path": "./packages/build" }, { "path": "./packages/notification-center-view" }]
+  "references": [
+    { "path": "./packages/build" },
+    { "path": "./packages/e2e" },
+    { "path": "./packages/notification-center-view" },
+    { "path": "./packages/server" }
+  ]
 }
