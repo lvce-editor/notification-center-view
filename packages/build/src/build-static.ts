@@ -36,3 +36,8 @@ const productionWorkerPath = join(root, 'dist', commitHash, 'packages', 'notific
 await mkdir(join(productionWorkerPath, '..'), { recursive: true })
 await cp(workerPath, productionWorkerPath)
 await cp(join(root, 'dist'), join(root, '.tmp', 'static'), { recursive: true })
+
+const rpcPath = join(root, 'dist', commitHash, 'js', 'lvce-editor-rpc.js')
+const staticRpcPath = join(root, '.tmp', 'static', 'js', 'lvce-editor-rpc.js')
+await mkdir(join(staticRpcPath, '..'), { recursive: true })
+await cp(rpcPath, staticRpcPath)

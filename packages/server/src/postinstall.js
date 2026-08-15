@@ -1,4 +1,4 @@
-import { readFile, readdir, writeFile } from 'node:fs/promises'
+import { cp, mkdir, readFile, readdir, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
@@ -32,3 +32,8 @@ if (!content.includes(`// ${declarationPrefix}`)) {
   const replacement = `// ${declaration}\nconst notificationCenterViewWorkerUrl = \`${getRemoteUrl(workerPath)}\`;`
   await writeFile(rendererWorkerPath, content.replace(declaration, replacement))
 }
+
+const rpcPath = join(serverStaticPath, commitHash, 'js', 'lvce-editor-rpc.js')
+const rootRpcPath = join(serverStaticPath, 'js', 'lvce-editor-rpc.js')
+await mkdir(join(rootRpcPath, '..'), { recursive: true })
+await cp(rpcPath, rootRpcPath)
