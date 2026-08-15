@@ -3,7 +3,7 @@ import { getNotificationCenterVirtualDom } from '../GetNotificationCenterVirtual
 import * as NotificationCenterStates from '../NotificationCenterStates/NotificationCenterStates.ts'
 import * as RendererProcess from '../RendererProcess/RendererProcess.ts'
 
-export const renderCommands = (uid: number, diffResult: readonly number[]): readonly unknown[] => {
+const renderCommands = (uid: number, diffResult: readonly number[]): readonly unknown[] => {
   const { scheduledState } = NotificationCenterStates.get(uid)
   NotificationCenterStates.set(uid, scheduledState, scheduledState)
   if (diffResult.length === 0) {
