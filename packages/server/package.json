@@ -7,7 +7,7 @@
     "postinstall": "node src/postinstall.js"
   },
   "dependencies": {
-    "@lvce-editor/server": "0.101.9",
+    "@lvce-editor/server": "0.103.19",
     "@lvce-editor/static-server": "0.101.9"
   },
   "devDependencies": {
