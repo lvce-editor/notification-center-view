@@ -1,6 +1,7 @@
 import { cp, mkdir, readFile, readdir, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
+import { patchWaitingAssertions } from './patchWaitingAssertions.js'
 
 const root = join(import.meta.dirname, '..', '..', '..')
 
@@ -37,3 +38,10 @@ const rpcPath = join(serverStaticPath, commitHash, 'js', 'lvce-editor-rpc.js')
 const rootRpcPath = join(serverStaticPath, 'js', 'lvce-editor-rpc.js')
 await mkdir(join(rootRpcPath, '..'), { recursive: true })
 await cp(rpcPath, rootRpcPath)
+
+const rendererProcessPath = join(serverStaticPath, commitHash, 'packages', 'renderer-process', 'dist', 'rendererProcessMain.js')
+const rendererProcessContent = await readFile(rendererProcessPath, 'utf8')
+const patchedRendererProcessContent = patchWaitingAssertions(rendererProcessContent)
+if (patchedRendererProcessContent !== rendererProcessContent) {
+  await writeFile(rendererProcessPath, patchedRendererProcessContent)
+}

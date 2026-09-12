@@ -15,5 +15,5 @@
     "target": "esnext",
     "types": ["node"]
   },
-  "include": ["src"]
+  "include": ["src", "test"]
 }
