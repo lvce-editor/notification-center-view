@@ -1,0 +1,9 @@
+{
+  "artifacts": [
+    [
+      ".tmp/dist/dist/notificationCenterWorkerMain.js",
+      "packages/renderer-worker/node_modules/@lvce-editor/about-view/dist/notificationCenterWorkerMain.js"
+    ]
+  ],
+  "scripts": ["packages/extension-host-worker-tests/scripts/test-notification-layout.mjs"]
+}
