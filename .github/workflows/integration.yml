@@ -42,7 +42,7 @@ jobs:
       - name: Run owned integration tests
         shell: bash
         working-directory: .tmp/lvce-integration/packages/extension-host-worker-tests
-        run: npm run e2e:headless --
+        run: npm run e2e:headless -- '--initial-settings={"statusBar.itemsVisible":true,"statusBar.builtinNotificationsEnabled":true}'
       - name: test-notification-layout
         if: runner.os == 'Linux'
         working-directory: .tmp/lvce-integration
