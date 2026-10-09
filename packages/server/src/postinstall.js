@@ -18,6 +18,17 @@ const staticServerPackagePaths = new Set([
   serverRequire.resolve('@lvce-editor/static-server/package.json'),
 ])
 
+// These notification fixtures exercise the built-in status bar control.
+const enableNotificationFixtureSettings = async (path) => {
+  const settings = JSON.parse(await readFile(path, 'utf8'))
+  settings['statusBar.itemsVisible'] = true
+  settings['statusBar.builtinNotificationsEnabled'] = true
+  await writeFile(path, `${JSON.stringify(settings, null, 2)}\n`)
+}
+
+const sharedProcessPackagePath = serverRequire.resolve('@lvce-editor/shared-process/package.json')
+await enableNotificationFixtureSettings(join(dirname(sharedProcessPackagePath), 'config', 'defaultSettings.json'))
+
 for (const staticServerPackagePath of staticServerPackagePaths) {
   const serverStaticPath = join(dirname(staticServerPackagePath), 'static')
   const commitHashPattern = /^[a-z\d]{7}$/
@@ -50,6 +61,8 @@ for (const staticServerPackagePath of staticServerPackagePaths) {
     }
     await writeFile(indexPath, indexContent.replace(indexOccurrence, indexReplacement))
   }
+
+  await enableNotificationFixtureSettings(join(serverStaticPath, commitHash, 'config', 'defaultSettings.json'))
 
   const rpcPath = join(serverStaticPath, commitHash, 'js', 'lvce-editor-rpc.js')
   const rootRpcPath = join(serverStaticPath, 'js', 'lvce-editor-rpc.js')
