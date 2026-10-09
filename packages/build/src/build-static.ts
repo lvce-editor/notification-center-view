@@ -22,15 +22,22 @@ const getRemoteUrl = (path: string): string => {
 }
 
 const content = await readFile(rendererWorkerPath, 'utf8')
-const remoteDeclaration = `const notificationCenterViewWorkerUrl = \`${getRemoteUrl(workerPath)}\`;`
-const productionDeclaration =
-  'const notificationCenterViewWorkerUrl = `${assetDir}/packages/notification-center-view/dist/notificationCenterWorkerMain.js`;'
-
-if (!content.includes(remoteDeclaration)) {
+const remoteUrl = getRemoteUrl(workerPath)
+const remoteOccurrence = `\`${remoteUrl}\``
+const productionOccurrence = '`${assetDir}/packages/notification-center-view/dist/notificationCenterWorkerMain.js`'
+if (!content.includes(remoteOccurrence)) {
   throw new Error('notification center worker development URL not found')
 }
+await writeFile(rendererWorkerPath, content.replace(remoteOccurrence, productionOccurrence))
 
-await writeFile(rendererWorkerPath, content.replace(remoteDeclaration, productionDeclaration))
+const indexPath = join(root, 'dist', 'index.html')
+const indexContent = await readFile(indexPath, 'utf8')
+const indexOccurrence = `"develop.notificationCenterViewWorkerPath": "${remoteUrl}"`
+const indexReplacement = `"develop.notificationCenterViewWorkerPath": "/notification-center-view/${commitHash}/packages/notification-center-view/dist/notificationCenterWorkerMain.js"`
+if (!indexContent.includes(indexOccurrence)) {
+  throw new Error('notification center worker development configuration not found')
+}
+await writeFile(indexPath, indexContent.replace(indexOccurrence, indexReplacement))
 
 const productionWorkerPath = join(root, 'dist', commitHash, 'packages', 'notification-center-view', 'dist', 'notificationCenterWorkerMain.js')
 await mkdir(join(productionWorkerPath, '..'), { recursive: true })
