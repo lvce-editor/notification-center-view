@@ -1,6 +1,6 @@
 import { beforeEach, expect, test } from '@jest/globals'
 import { createMockRpc } from '@lvce-editor/rpc'
-import { RendererProcess } from '@lvce-editor/rpc-registry'
+import { RendererWorker } from '@lvce-editor/rpc-registry'
 import { create } from '../src/parts/Create/Create.ts'
 import { handleNotificationsChangedAll } from '../src/parts/HandleNotificationsChangedAll/HandleNotificationsChangedAll.ts'
 import * as NotificationCenterStates from '../src/parts/NotificationCenterStates/NotificationCenterStates.ts'
@@ -11,11 +11,11 @@ beforeEach(() => {
 
 test('renders an update for every open notification center instance', async () => {
   const invocations: readonly unknown[][] = []
-  RendererProcess.set(
+  RendererWorker.set(
     createMockRpc({
       commandMap: {
-        async 'Viewlet.sendMultiple'(commands: readonly unknown[]): Promise<void> {
-          ;(invocations as unknown[][]).push(commands as unknown[])
+        async 'Viewlet.requestRender'(uid: number): Promise<void> {
+          ;(invocations as unknown[][]).push([uid])
         },
       },
     }),
@@ -28,5 +28,5 @@ test('renders an update for every open notification center instance', async () =
 
   expect(NotificationCenterStates.get(1).newState.notifications).toEqual(notifications)
   expect(NotificationCenterStates.get(2).newState.notifications).toEqual(notifications)
-  expect(invocations).toHaveLength(2)
+  expect(invocations).toEqual([[1], [2]])
 })

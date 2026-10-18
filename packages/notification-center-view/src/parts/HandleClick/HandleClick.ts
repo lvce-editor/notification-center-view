@@ -1,3 +1,4 @@
+import type { AsyncCommandContext } from '@lvce-editor/viewlet-registry'
 import { ExtensionManagementWorker } from '@lvce-editor/rpc-registry'
 import type { NotificationCenterState } from '../NotificationCenterState/NotificationCenterState.ts'
 
@@ -17,4 +18,10 @@ export const handleClick = async (state: NotificationCenterState, name: string):
     return { ...state, notifications: state.notifications.filter((notification) => notification.extensionId !== extensionId) }
   }
   return state
+}
+
+// The extension worker awaits our notification callback. Keep this command off
+// the serial queue; that callback supplies the authoritative updated state.
+export const handleClickAsync = async (context: AsyncCommandContext<NotificationCenterState>, name: string): Promise<void> => {
+  await handleClick(context.getState(), name)
 }

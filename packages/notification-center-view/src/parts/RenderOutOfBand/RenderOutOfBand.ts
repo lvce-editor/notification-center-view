@@ -1,15 +1,5 @@
-import { RendererProcess } from '@lvce-editor/rpc-registry'
-import { diff2 } from '../Diff2/Diff2.ts'
-import { render2 } from '../Render2/Render2.ts'
+import { RendererWorker } from '@lvce-editor/rpc-registry'
 
 export const renderOutOfBand = async (uid: number): Promise<void> => {
-  const diffResult = diff2(uid)
-  if (diffResult.length === 0) {
-    return
-  }
-  const commands = render2(uid, diffResult)
-  if (commands.length === 0) {
-    return
-  }
-  await RendererProcess.invoke('Viewlet.sendMultiple', commands)
+  await RendererWorker.invoke('Viewlet.requestRender', uid)
 }
