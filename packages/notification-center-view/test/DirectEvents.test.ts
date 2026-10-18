@@ -123,3 +123,14 @@ test('accepts reentrant notification callbacks while an input command awaits ext
   await directState.commands['Viewlet.executeViewletCommand'](1, 'handleClick', 'clear')
   expect(States.get(1).newState.notifications).toEqual([expect.objectContaining({ id: 42 })])
 })
+
+test('render captures changes that arrive after diff and returns an ordered commit marker', async () => {
+  const { render2 } = await import('../src/parts/Render2/Render2.ts')
+  const { diff2 } = await import('../src/parts/Diff2/Diff2.ts')
+  const previousDiff = diff2(1)
+  const { newState, oldState } = States.get(1)
+  States.set(1, oldState, { ...newState, notifications: [{ extensionId: 'example', id: 2, message: 'ready', type: 'info' }] })
+  expect(await render2(1, previousDiff)).toEqual([['Viewlet.commitPending', 1, 17]])
+  expect(processInvoke).toHaveBeenCalledWith('Viewlet.queueCommands', 1, [expect.arrayContaining(['Viewlet.setDom2', 1]), ['Viewlet.setUid', 1, 1]])
+  expect(await render2(1, [])).toEqual([])
+})
