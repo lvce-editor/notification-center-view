@@ -134,3 +134,13 @@ test('render captures changes that arrive after diff and returns an ordered comm
   expect(processInvoke).toHaveBeenCalledWith('Viewlet.queueCommands', 1, [expect.arrayContaining(['Viewlet.setDom2', 1]), ['Viewlet.setUid', 1, 1]])
   expect(await render2(1, [])).toEqual([])
 })
+
+test('secondary ports preserve the renderer-process connection used for patch commits', async () => {
+  const secondaryInvoke = jest.fn<(...args: readonly any[]) => Promise<any>>().mockResolvedValue(99)
+  createRpc.mockResolvedValueOnce({ invoke: secondaryInvoke })
+  await handleMessagePort({} as MessagePort, false)
+  const { newState, oldState } = States.get(1)
+  await queueRender(1, [['Viewlet.setDom2', 1, []]], oldState, newState)
+  expect(processInvoke).toHaveBeenCalledWith('Viewlet.queueCommands', 1, expect.any(Array))
+  expect(secondaryInvoke).not.toHaveBeenCalled()
+})
